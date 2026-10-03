@@ -50,7 +50,7 @@ class AddressesPage(BasePage):
         for attempt in range(5):
             try:
                 self.add_button.click(timeout=5000)
-                self.district_item.click(timeout=3000)
+                self.district_item.click(timeout=10000)
                 break
             except PlaywrightTimeoutError:
                 self.close_overlays()
