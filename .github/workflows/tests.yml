@@ -1,0 +1,36 @@
+name: UI tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install browser
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run tests
+        env:
+          BASE_URL: https://demo.app.stack-it.ru/fl/
+          STACK_LOGIN: ${{ secrets.STACK_LOGIN }}
+          STACK_PASSWORD: ${{ secrets.STACK_PASSWORD }}
+        run: python -m pytest
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
