@@ -28,9 +28,15 @@ jobs:
           STACK_PASSWORD: ${{ secrets.STACK_PASSWORD }}
         run: python -m pytest --reruns 2 --reruns-delay 5
 
-      - name: Upload Allure results
+      - name: Generate Allure report
+        if: always()
+        run: |
+          npm install -g allure-commandline
+          allure generate allure-results --single-file --clean -o allure-report
+
+      - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: allure-results
+          name: allure-report
+          path: allure-report
