@@ -26,7 +26,7 @@ jobs:
           BASE_URL: https://demo.app.stack-it.ru/fl/
           STACK_LOGIN: ${{ secrets.STACK_LOGIN }}
           STACK_PASSWORD: ${{ secrets.STACK_PASSWORD }}
-        run: python -m pytest
+        run: python -m pytest --reruns 2 --reruns-delay 5
 
       - name: Upload Allure results
         if: always()
