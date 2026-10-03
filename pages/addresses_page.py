@@ -45,6 +45,11 @@ class AddressesPage(BasePage):
         else:
             self.page.keyboard.press("Escape")
 
+    def close_auth_dialog(self):
+        if self.auth_button.is_visible():
+            self.auth_button.click()
+            expect(self.auth_button).to_be_hidden()
+
     @allure.step("Нажать «+» и выбрать «Район»")
     def open_create_district(self) -> DistrictDialog:
         for attempt in range(5):

@@ -1,11 +1,15 @@
 import time
 import allure
 import pytest
+from playwright.sync_api import expect
 
 import config
 from pages.addresses_page import AddressesPage
 from pages.login_page import LoginPage
 from pages.district_dialog import DistrictDialog
+
+expect.set_options(timeout=15000)
+
 
 @pytest.fixture
 def auth_page(page):
@@ -26,6 +30,7 @@ def addresses(auth_page):
 def dialog(addresses):
     district_dialog = addresses.open_create_district()
     yield district_dialog
+    addresses.close_auth_dialog()
     if district_dialog.cancel_button.is_visible():
         district_dialog.cancel()
 
@@ -39,6 +44,7 @@ def district_name():
 def cleanup(addresses):
     names = []
     yield names
+    addresses.close_auth_dialog()
     dialog = DistrictDialog(addresses.page)
     if dialog.cancel_button.is_visible():
         dialog.cancel()
